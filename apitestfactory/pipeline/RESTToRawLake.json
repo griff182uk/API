@@ -55,7 +55,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"FileSystem": {
-								"value": "@pipeline().parameters.FileSystem",
+								"value": "lake",
 								"type": "Expression"
 							},
 							"Directory": {
@@ -63,7 +63,7 @@
 								"type": "Expression"
 							},
 							"File": {
-								"value": "@concat(replace(pipeline().parameters.Directory,'/','_'),'_',pipeline().parameters.File,'_',utcnow())",
+								"value": "@concat(replace(pipeline().parameters.Directory,'/','_'),'_',utcnow())",
 								"type": "Expression"
 							}
 						}
@@ -78,13 +78,7 @@
 			"RelativeUrl": {
 				"type": "string"
 			},
-			"FileSystem": {
-				"type": "string"
-			},
 			"Directory": {
-				"type": "string"
-			},
-			"File": {
 				"type": "string"
 			}
 		},

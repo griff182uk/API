@@ -15,48 +15,32 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"BaseUrl": {
-							"value": "@pipeline().parameters.BaseUrl",
+							"value": "@variables('BaseUrl')",
 							"type": "Expression"
 						},
 						"RelativeUrl": {
-							"value": "@pipeline().parameters.RelativeUrl",
-							"type": "Expression"
-						},
-						"FileSystem": {
-							"value": "@pipeline().parameters.FileSystem",
+							"value": "@variables('RelativeUrl')",
 							"type": "Expression"
 						},
 						"Directory": {
-							"value": "@pipeline().parameters.Directory",
-							"type": "Expression"
-						},
-						"File": {
-							"value": "@pipeline().parameters.File",
+							"value": "@variables('Directory')",
 							"type": "Expression"
 						}
 					}
 				}
 			}
 		],
-		"parameters": {
+		"variables": {
 			"BaseUrl": {
-				"type": "string",
+				"type": "String",
 				"defaultValue": "https://api.github.com/orgs/dotnet/repos"
 			},
 			"RelativeUrl": {
-				"type": "string"
-			},
-			"FileSystem": {
-				"type": "string",
-				"defaultValue": "lake"
+				"type": "String"
 			},
 			"Directory": {
-				"type": "string",
+				"type": "String",
 				"defaultValue": "raw/github/repositories"
-			},
-			"File": {
-				"type": "string",
-				"defaultValue": "repositories"
 			}
 		},
 		"folder": {
