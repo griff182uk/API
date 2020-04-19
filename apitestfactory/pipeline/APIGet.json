@@ -1,9 +1,10 @@
 {
-	"name": "CopyPipeline_zsk",
+	"name": "APIGet",
 	"properties": {
+		"description": "Gets API data into raw layer of data lake as is",
 		"activities": [
 			{
-				"name": "Copy_zsk",
+				"name": "API Copy",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -41,7 +42,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_zsk",
+						"referenceName": "API",
 						"type": "DatasetReference"
 					}
 				],
@@ -53,6 +54,17 @@
 				]
 			}
 		],
+		"parameters": {
+			"URL": {
+				"type": "string"
+			},
+			"DataSource": {
+				"type": "string"
+			},
+			"DataSourceType": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
