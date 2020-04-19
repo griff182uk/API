@@ -88,11 +88,6 @@
 				"type": "string"
 			}
 		},
-		"variables": {
-			"FileName": {
-				"type": "String"
-			}
-		},
 		"folder": {
 			"name": "Engineering"
 		},
