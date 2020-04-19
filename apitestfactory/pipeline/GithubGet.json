@@ -40,19 +40,23 @@
 		],
 		"parameters": {
 			"BaseUrl": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "https://api.github.com/orgs/dotnet/repos"
 			},
 			"RelativeUrl": {
 				"type": "string"
 			},
 			"FileSystem": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "lake"
 			},
 			"Directory": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "raw/github/repositories"
 			},
 			"File": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "repositories"
 			}
 		},
 		"folder": {
