@@ -1,0 +1,12 @@
+{
+	"name": "SourceDataset_zsk",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "RESTConn",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	}
+}
