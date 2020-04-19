@@ -1,12 +1,16 @@
 {
 	"name": "RESTConn",
 	"properties": {
-		"annotations": [],
 		"type": "RestService",
+		"annotations": [],
 		"typeProperties": {
-			"url": "https://api.github.com/orgs/dotnet/repos",
-			"enableServerCertificateValidation": true,
+			"url": "@{linkedService().BaseUrl}",
 			"authenticationType": "Anonymous"
+		}
+	},
+	"parameters": {
+		"BaseUrl": {
+			"type": "String"
 		}
 	}
 }
