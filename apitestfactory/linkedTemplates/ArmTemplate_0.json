@@ -140,13 +140,13 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/APIGet')]",
+			"name": "[concat(parameters('factoryName'), '/RESTToRawLake')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "APIToRawLake",
+						"name": "CopyRESTToRawLake",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -231,11 +231,6 @@
 						"type": "string"
 					}
 				},
-				"variables": {
-					"FileName": {
-						"type": "String"
-					}
-				},
 				"folder": {
 					"name": "Engineering"
 				},
@@ -247,19 +242,19 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/GithubGet')]",
+			"name": "[concat(parameters('factoryName'), '/GithubToRawLake')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "APIGet",
+						"name": "RESTToRawLake",
 						"type": "ExecutePipeline",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
-								"referenceName": "APIGet",
+								"referenceName": "RESTToRawLake",
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
@@ -315,7 +310,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/APIGet')]"
+				"[concat(variables('factoryId'), '/pipelines/RESTToRawLake')]"
 			]
 		}
 	]
