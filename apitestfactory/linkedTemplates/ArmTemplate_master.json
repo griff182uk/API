@@ -7,13 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "apitestfactory"
 		},
-		"LakeStorage_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://griffapitest.dfs.core.windows.net"
-		},
 		"RESTConn_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{linkedService().BaseUrl}"
+		},
+		"RawLakeConn_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://griffapitest.dfs.core.windows.net"
 		},
 		"containerUri": {
 			"type": "string",
@@ -42,11 +42,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"LakeStorage_properties_typeProperties_url": {
-						"value": "[parameters('LakeStorage_properties_typeProperties_url')]"
-					},
 					"RESTConn_properties_typeProperties_url": {
 						"value": "[parameters('RESTConn_properties_typeProperties_url')]"
+					},
+					"RawLakeConn_properties_typeProperties_url": {
+						"value": "[parameters('RawLakeConn_properties_typeProperties_url')]"
 					}
 				}
 			},

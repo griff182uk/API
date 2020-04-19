@@ -7,32 +7,19 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "apitestfactory"
 		},
-		"LakeStorage_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://griffapitest.dfs.core.windows.net"
-		},
 		"RESTConn_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{linkedService().BaseUrl}"
+		},
+		"RawLakeConn_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://griffapitest.dfs.core.windows.net"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/LakeStorage')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LakeStorage_properties_typeProperties_url')]"
-				}
-			},
-			"dependsOn": []
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/RESTConn')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -53,53 +40,17 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/API')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/RawLakeConn')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "RESTConn",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"BaseUrl": {
-						"type": "string",
-						"defaultValue": "https://api.github.com/orgs/dotnet/repos"
-					}
-				},
 				"annotations": [],
-				"type": "RestResource",
-				"typeProperties": {},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/RESTConn')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DestinationDataset_zsk')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LakeStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Json",
+				"type": "AzureBlobFS",
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "repositories",
-						"folderPath": "github",
-						"fileSystem": "lake"
-					}
-				},
-				"schema": {}
+					"url": "[parameters('RawLakeConn_properties_typeProperties_url')]"
+				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LakeStorage')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/RESTAnon')]",
@@ -108,17 +59,31 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "RESTConn",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"BaseUrl": {
+							"value": "@dataset().BaseUrl",
+							"type": "Expression"
+						}
+					}
 				},
 				"parameters": {
 					"BaseUrl": {
 						"type": "string",
 						"defaultValue": "https://api.github.com/orgs/dotnet/repos"
+					},
+					"RelativeUrl": {
+						"type": "string"
 					}
 				},
 				"annotations": [],
 				"type": "RestResource",
-				"typeProperties": {},
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@dataset().RelativeUrl",
+						"type": "Expression"
+					}
+				},
 				"schema": []
 			},
 			"dependsOn": [
@@ -126,81 +91,52 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/APIGet')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/RawLakeJSON')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "Gets API data into raw layer of data lake as is",
-				"activities": [
-					{
-						"name": "API Copy",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [
-							{
-								"name": "Destination",
-								"value": "lake/github/repositories"
-							}
-						],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"httpRequestTimeout": "00:01:40",
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET"
-							},
-							"sink": {
-								"type": "JsonSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "JsonWriteSettings",
-									"quoteAllText": true,
-									"filePattern": "setOfObjects"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "API",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "DestinationDataset_zsk",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
+				"linkedServiceName": {
+					"referenceName": "RawLakeConn",
+					"type": "LinkedServiceReference"
+				},
 				"parameters": {
-					"URL": {
+					"FileSystem": {
 						"type": "string"
 					},
-					"DataSource": {
+					"Directory": {
 						"type": "string"
 					},
-					"DataSourceType": {
+					"File": {
 						"type": "string"
 					}
 				},
-				"annotations": []
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().File",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().Directory",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().FileSystem",
+							"type": "Expression"
+						}
+					},
+					"compression": {
+						"type": "gzip",
+						"level": "Optimal"
+					}
+				},
+				"schema": {}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/API')]",
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_zsk')]"
+				"[concat(variables('factoryId'), '/linkedServices/RawLakeConn')]"
 			]
 		}
 	]

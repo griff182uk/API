@@ -5,11 +5,11 @@
 		"factoryName": {
 			"value": "apitestfactory"
 		},
-		"LakeStorage_properties_typeProperties_url": {
-			"value": "https://griffapitest.dfs.core.windows.net"
-		},
 		"RESTConn_properties_typeProperties_url": {
 			"value": "@{linkedService().BaseUrl}"
+		},
+		"RawLakeConn_properties_typeProperties_url": {
+			"value": "https://griffapitest.dfs.core.windows.net"
 		},
 		"containerUri": {
 			"value": ""

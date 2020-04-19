@@ -6,14 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "apitestfactory"
-		},
-		"RESTConn_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "@{linkedService().BaseUrl}"
-		},
-		"RawLakeConn_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://griffapitest.dfs.core.windows.net"
 		}
 	},
 	"variables": {
@@ -54,9 +46,7 @@
 				},
 				"schema": []
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/RESTConn')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/RawLakeJSON')]",
@@ -100,31 +90,11 @@
 						"type": "gzip",
 						"level": "Optimal"
 					}
-				},
-				"schema": {}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/RawLakeConn')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RESTConn')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "RestService",
-				"annotations": [],
-				"typeProperties": {
-					"url": "[parameters('RESTConn_properties_typeProperties_url')]",
-					"authenticationType": "Anonymous"
-				},
-				"parameters": {
-					"BaseUrl": {
-						"type": "String"
-					}
-				}
-			},
-			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/RawLakeConn')]",
@@ -134,7 +104,7 @@
 				"annotations": [],
 				"type": "AzureBlobFS",
 				"typeProperties": {
-					"url": "[parameters('RawLakeConn_properties_typeProperties_url')]"
+					"url": "https://griffapitest.dfs.core.windows.net"
 				}
 			},
 			"dependsOn": []
