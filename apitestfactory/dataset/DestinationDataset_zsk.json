@@ -1,0 +1,19 @@
+{
+	"name": "DestinationDataset_zsk",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LakeStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "repositories",
+				"folderPath": "github",
+				"fileSystem": "lake"
+			}
+		}
+	}
+}
