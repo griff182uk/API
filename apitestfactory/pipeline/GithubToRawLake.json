@@ -1,15 +1,15 @@
 {
-	"name": "GithubGet",
+	"name": "GithubToRawLake",
 	"properties": {
 		"activities": [
 			{
-				"name": "APIGet",
+				"name": "RESTToRawLake",
 				"type": "ExecutePipeline",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "APIGet",
+						"referenceName": "RESTToRawLake",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,

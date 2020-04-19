@@ -1,9 +1,9 @@
 {
-	"name": "APIGet",
+	"name": "RESTToRawLake",
 	"properties": {
 		"activities": [
 			{
-				"name": "APIToRawLake",
+				"name": "CopyRESTToRawLake",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
