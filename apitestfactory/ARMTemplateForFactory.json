@@ -301,6 +301,70 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CatsToRawLake')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "RESTToRawLake",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "RESTToRawLake",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"BaseUrl": {
+									"value": "@variables('BaseUrl')",
+									"type": "Expression"
+								},
+								"RelativeUrl": {
+									"value": "@variables('RelativeUrl')",
+									"type": "Expression"
+								},
+								"DataSource": {
+									"value": "@variables('DataSource')",
+									"type": "Expression"
+								},
+								"DataSourceType": {
+									"value": "@variables('DataSourceType')",
+									"type": "Expression"
+								}
+							}
+						}
+					}
+				],
+				"variables": {
+					"BaseUrl": {
+						"type": "String",
+						"defaultValue": "https://cat-fact.herokuapp.com/facts"
+					},
+					"RelativeUrl": {
+						"type": "String"
+					},
+					"DataSource": {
+						"type": "String",
+						"defaultValue": "catfact"
+					},
+					"DataSourceType": {
+						"type": "String",
+						"defaultValue": "facts"
+					}
+				},
+				"folder": {
+					"name": "Cats"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/RESTToRawLake')]"
+			]
 		}
 	]
 }
