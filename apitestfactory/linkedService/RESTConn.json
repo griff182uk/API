@@ -2,11 +2,11 @@
 	"name": "RESTConn",
 	"properties": {
 		"type": "RestService",
-		"annotations": [],
 		"typeProperties": {
-			"url": "@{linkedService().BaseUrl}",
-			"authenticationType": "Anonymous"
-		}
+			"authenticationType": "Anonymous",
+			"url": "@{linkedService().BaseUrl}"
+		},
+		"annotations": []
 	},
 	"parameters": {
 		"BaseUrl": {
