@@ -22,8 +22,12 @@
 							"value": "@variables('RelativeUrl')",
 							"type": "Expression"
 						},
-						"Directory": {
-							"value": "@variables('Directory')",
+						"DataSource": {
+							"value": "@variables('DataSource')",
+							"type": "Expression"
+						},
+						"DataSourceType": {
+							"value": "@variables('DataSourceType')",
 							"type": "Expression"
 						}
 					}
