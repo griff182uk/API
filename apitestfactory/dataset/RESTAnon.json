@@ -3,16 +3,31 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "RESTConn",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"BaseUrl": {
+					"value": "@dataset().BaseUrl",
+					"type": "Expression"
+				}
+			}
 		},
 		"parameters": {
 			"BaseUrl": {
 				"type": "string",
 				"defaultValue": "https://api.github.com/orgs/dotnet/repos"
+			},
+			"RelativeUrl": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
 		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@dataset().RelativeUrl",
+				"type": "Expression"
+			}
+		},
 		"schema": []
 	}
 }
