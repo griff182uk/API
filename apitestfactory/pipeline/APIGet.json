@@ -1,0 +1,23 @@
+{
+	"name": "APIGet",
+	"properties": {
+		"parameters": {
+			"BaseUrl": {
+				"type": "string"
+			},
+			"RelativeUrl": {
+				"type": "string"
+			},
+			"FileSystem": {
+				"type": "string"
+			},
+			"Directory": {
+				"type": "string"
+			},
+			"File": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
