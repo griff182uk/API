@@ -79,15 +79,15 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"FileSystem": {
-										"value": "@pipeline().parameters.FileSystem",
+										"value": "lake",
 										"type": "Expression"
 									},
 									"Directory": {
-										"value": "@pipeline().parameters.Directory",
+										"value": "@concat('raw','/',pipeline().parameters.DataSource,'/',pipeline().parameters.DataSourceType)",
 										"type": "Expression"
 									},
 									"File": {
-										"value": "@concat(replace(pipeline().parameters.Directory,'/','_'),'_',pipeline().parameters.File,'_',utcnow())",
+										"value": "@concat('raw','_',pipeline().parameters.DataSource,'_',pipeline().parameters.DataSourceType,'_',utcnow())",
 										"type": "Expression"
 									}
 								}
@@ -102,13 +102,10 @@
 					"RelativeUrl": {
 						"type": "string"
 					},
-					"FileSystem": {
+					"DataSource": {
 						"type": "string"
 					},
-					"Directory": {
-						"type": "string"
-					},
-					"File": {
+					"DataSourceType": {
 						"type": "string"
 					}
 				},
@@ -141,47 +138,39 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"BaseUrl": {
-									"value": "@pipeline().parameters.BaseUrl",
+									"value": "@variables('BaseUrl')",
 									"type": "Expression"
 								},
 								"RelativeUrl": {
-									"value": "@pipeline().parameters.RelativeUrl",
+									"value": "@variables('RelativeUrl')",
 									"type": "Expression"
 								},
-								"FileSystem": {
-									"value": "@pipeline().parameters.FileSystem",
+								"DataSource": {
+									"value": "@variables('DataSource')",
 									"type": "Expression"
 								},
-								"Directory": {
-									"value": "@pipeline().parameters.Directory",
-									"type": "Expression"
-								},
-								"File": {
-									"value": "@pipeline().parameters.File",
+								"DataSourceType": {
+									"value": "@variables('DataSourceType')",
 									"type": "Expression"
 								}
 							}
 						}
 					}
 				],
-				"parameters": {
+				"variables": {
 					"BaseUrl": {
-						"type": "string",
+						"type": "String",
 						"defaultValue": "https://api.github.com/orgs/dotnet/repos"
 					},
 					"RelativeUrl": {
-						"type": "string"
+						"type": "String"
 					},
-					"FileSystem": {
-						"type": "string",
-						"defaultValue": "lake"
+					"DataSource": {
+						"type": "String",
+						"defaultValue": "github"
 					},
-					"Directory": {
-						"type": "string",
-						"defaultValue": "raw/github/repositories"
-					},
-					"File": {
-						"type": "string",
+					"DataSourceType": {
+						"type": "String",
 						"defaultValue": "repositories"
 					}
 				},
