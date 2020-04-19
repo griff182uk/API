@@ -63,7 +63,7 @@
 								"type": "Expression"
 							},
 							"File": {
-								"value": "@concat(pipeline().parameters.Directory,pipeline().parameters.File,utcnow())",
+								"value": "@concat(replace(pipeline().parameters.Directory,'/','_'),'_',pipeline().parameters.File,'_',utcnow())",
 								"type": "Expression"
 							}
 						}
