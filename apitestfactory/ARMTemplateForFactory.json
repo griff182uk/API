@@ -87,7 +87,7 @@
 										"type": "Expression"
 									},
 									"File": {
-										"value": "@pipeline().parameters.File",
+										"value": "@concat(pipeline().parameters.Directory,pipeline().parameters.File,utcnow())",
 										"type": "Expression"
 									}
 								}
@@ -112,6 +112,11 @@
 						"type": "string"
 					}
 				},
+				"variables": {
+					"FileName": {
+						"type": "String"
+					}
+				},
 				"folder": {
 					"name": "Engineering"
 				},
@@ -120,6 +125,78 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/RESTAnon')]",
 				"[concat(variables('factoryId'), '/datasets/RawLakeJSON')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GithubGet')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "APIGet",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "APIGet",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"BaseUrl": {
+									"value": "@pipeline().parameters.BaseUrl",
+									"type": "Expression"
+								},
+								"RelativeUrl": {
+									"value": "@pipeline().parameters.RelativeUrl",
+									"type": "Expression"
+								},
+								"FileSystem": {
+									"value": "@pipeline().parameters.FileSystem",
+									"type": "Expression"
+								},
+								"Directory": {
+									"value": "@pipeline().parameters.Directory",
+									"type": "Expression"
+								},
+								"File": {
+									"value": "@pipeline().parameters.File",
+									"type": "Expression"
+								}
+							}
+						}
+					}
+				],
+				"parameters": {
+					"BaseUrl": {
+						"type": "string",
+						"defaultValue": "https://api.github.com/orgs/dotnet/repos"
+					},
+					"RelativeUrl": {
+						"type": "string"
+					},
+					"FileSystem": {
+						"type": "string",
+						"defaultValue": "lake"
+					},
+					"Directory": {
+						"type": "string",
+						"defaultValue": "raw/github/repositories"
+					},
+					"File": {
+						"type": "string",
+						"defaultValue": "repositories"
+					}
+				},
+				"folder": {
+					"name": "Marketing"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/APIGet')]"
 			]
 		},
 		{
@@ -240,78 +317,6 @@
 				}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/GithubGet')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "APIGet",
-						"type": "ExecutePipeline",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "APIGet",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"BaseUrl": {
-									"value": "@pipeline().parameters.BaseUrl",
-									"type": "Expression"
-								},
-								"RelativeUrl": {
-									"value": "@pipeline().parameters.RelativeUrl",
-									"type": "Expression"
-								},
-								"FileSystem": {
-									"value": "@pipeline().parameters.FileSystem",
-									"type": "Expression"
-								},
-								"Directory": {
-									"value": "@pipeline().parameters.Directory",
-									"type": "Expression"
-								},
-								"File": {
-									"value": "@pipeline().parameters.File",
-									"type": "Expression"
-								}
-							}
-						}
-					}
-				],
-				"parameters": {
-					"BaseUrl": {
-						"type": "string",
-						"defaultValue": "https://api.github.com/orgs/dotnet/repos"
-					},
-					"RelativeUrl": {
-						"type": "string"
-					},
-					"FileSystem": {
-						"type": "string",
-						"defaultValue": "lake"
-					},
-					"Directory": {
-						"type": "string",
-						"defaultValue": "raw/github/repositories"
-					},
-					"File": {
-						"type": "string",
-						"defaultValue": "repositories"
-					}
-				},
-				"folder": {
-					"name": "Marketing"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/APIGet')]"
-			]
 		}
 	]
 }
