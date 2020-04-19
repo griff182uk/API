@@ -1,0 +1,63 @@
+{
+	"name": "GithubGet",
+	"properties": {
+		"activities": [
+			{
+				"name": "APIGet",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "APIGet",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"BaseUrl": {
+							"value": "@pipeline().parameters.BaseUrl",
+							"type": "Expression"
+						},
+						"RelativeUrl": {
+							"value": "@pipeline().parameters.RelativeUrl",
+							"type": "Expression"
+						},
+						"FileSystem": {
+							"value": "@pipeline().parameters.FileSystem",
+							"type": "Expression"
+						},
+						"Directory": {
+							"value": "@pipeline().parameters.Directory",
+							"type": "Expression"
+						},
+						"File": {
+							"value": "@pipeline().parameters.File",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"BaseUrl": {
+				"type": "string"
+			},
+			"RelativeUrl": {
+				"type": "string"
+			},
+			"FileSystem": {
+				"type": "string"
+			},
+			"Directory": {
+				"type": "string"
+			},
+			"File": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Marketing"
+		},
+		"annotations": []
+	}
+}
