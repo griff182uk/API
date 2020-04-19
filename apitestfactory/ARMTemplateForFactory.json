@@ -21,6 +21,159 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/APIGet')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "APIToRawLake",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"httpRequestTimeout": "00:01:40",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET"
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings",
+									"quoteAllText": true
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "RESTAnon",
+								"type": "DatasetReference",
+								"parameters": {
+									"BaseUrl": {
+										"value": "@pipeline().parameters.BaseUrl",
+										"type": "Expression"
+									},
+									"RelativeUrl": {
+										"value": "@pipeline().parameters.RelativeUrl",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "RawLakeJSON",
+								"type": "DatasetReference",
+								"parameters": {
+									"FileSystem": {
+										"value": "@pipeline().parameters.FileSystem",
+										"type": "Expression"
+									},
+									"Directory": {
+										"value": "@pipeline().parameters.Directory",
+										"type": "Expression"
+									},
+									"File": {
+										"value": "@pipeline().parameters.File",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					}
+				],
+				"parameters": {
+					"BaseUrl": {
+						"type": "string"
+					},
+					"RelativeUrl": {
+						"type": "string"
+					},
+					"FileSystem": {
+						"type": "string"
+					},
+					"Directory": {
+						"type": "string"
+					},
+					"File": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "Common"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/RESTAnon')]",
+				"[concat(variables('factoryId'), '/datasets/RawLakeJSON')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GitHubGet')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GitHubGet",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "APIGet",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"parameters": {
+					"BaseUrl": {
+						"type": "string",
+						"defaultValue": "https://api.github.com/orgs/dotnet/repos"
+					},
+					"RelativeUrl": {
+						"type": "string"
+					},
+					"FileSystem": {
+						"type": "string",
+						"defaultValue": "lake"
+					},
+					"Directory": {
+						"type": "string",
+						"defaultValue": "github"
+					},
+					"File": {
+						"type": "string",
+						"defaultValue": "repositories"
+					}
+				},
+				"folder": {
+					"name": "Marketing"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/APIGet')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/RESTAnon')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -138,108 +291,6 @@
 				}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/APIGet')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "APIToRawLake",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"httpRequestTimeout": "00:01:40",
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET"
-							},
-							"sink": {
-								"type": "JsonSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "JsonWriteSettings",
-									"quoteAllText": true
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "RESTAnon",
-								"type": "DatasetReference",
-								"parameters": {
-									"BaseUrl": {
-										"value": "@pipeline().parameters.BaseUrl",
-										"type": "Expression"
-									},
-									"RelativeUrl": {
-										"value": "@pipeline().parameters.RelativeUrl",
-										"type": "Expression"
-									}
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "RawLakeJSON",
-								"type": "DatasetReference",
-								"parameters": {
-									"FileSystem": {
-										"value": "@pipeline().parameters.FileSystem",
-										"type": "Expression"
-									},
-									"Directory": {
-										"value": "@pipeline().parameters.Directory",
-										"type": "Expression"
-									},
-									"File": {
-										"value": "@pipeline().parameters.File",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					}
-				],
-				"parameters": {
-					"BaseUrl": {
-						"type": "string"
-					},
-					"RelativeUrl": {
-						"type": "string"
-					},
-					"FileSystem": {
-						"type": "string"
-					},
-					"Directory": {
-						"type": "string"
-					},
-					"File": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "Common"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/RESTAnon')]",
-				"[concat(variables('factoryId'), '/datasets/RawLakeJSON')]"
-			]
 		}
 	]
 }
