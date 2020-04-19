@@ -1,0 +1,24 @@
+{
+	"name": "GitHubGet",
+	"properties": {
+		"activities": [
+			{
+				"name": "GitHubGet",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "APIGet",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Marketing"
+		},
+		"annotations": []
+	}
+}
