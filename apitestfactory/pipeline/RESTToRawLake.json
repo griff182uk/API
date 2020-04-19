@@ -59,11 +59,11 @@
 								"type": "Expression"
 							},
 							"Directory": {
-								"value": "@pipeline().parameters.Directory",
+								"value": "@concat('raw','/',pipeline().parameters.DataSource,'/',pipeline().parameters.DataSourceType)",
 								"type": "Expression"
 							},
 							"File": {
-								"value": "@concat(replace(pipeline().parameters.Directory,'/','_'),'_',utcnow())",
+								"value": "@concat('raw','_',pipeline().parameters.DataSource,'_',pipeline().parameters.DataSourceType,'_',utcnow())",
 								"type": "Expression"
 							}
 						}
@@ -78,7 +78,10 @@
 			"RelativeUrl": {
 				"type": "string"
 			},
-			"Directory": {
+			"DataSource": {
+				"type": "string"
+			},
+			"DataSourceType": {
 				"type": "string"
 			}
 		},

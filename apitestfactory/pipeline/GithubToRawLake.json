@@ -38,9 +38,13 @@
 			"RelativeUrl": {
 				"type": "String"
 			},
-			"Directory": {
+			"DataSource": {
 				"type": "String",
-				"defaultValue": "github/repositories"
+				"defaultValue": "github"
+			},
+			"DataSourceType": {
+				"type": "String",
+				"defaultValue": "repositories"
 			}
 		},
 		"folder": {
