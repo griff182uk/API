@@ -16,6 +16,27 @@
 				}
 			}
 		],
+		"parameters": {
+			"BaseUrl": {
+				"type": "string",
+				"defaultValue": "https://api.github.com/orgs/dotnet/repos"
+			},
+			"RelativeUrl": {
+				"type": "string"
+			},
+			"FileSystem": {
+				"type": "string",
+				"defaultValue": "lake"
+			},
+			"Directory": {
+				"type": "string",
+				"defaultValue": "github"
+			},
+			"File": {
+				"type": "string",
+				"defaultValue": "repositories"
+			}
+		},
 		"folder": {
 			"name": "Marketing"
 		},
