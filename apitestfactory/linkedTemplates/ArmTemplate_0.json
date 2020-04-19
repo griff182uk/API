@@ -13,7 +13,7 @@
 		},
 		"RESTConn_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://api.github.com/orgs/dotnet/repos"
+			"defaultValue": "@{linkedService().BaseUrl}"
 		}
 	},
 	"variables": {
@@ -38,15 +38,43 @@
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"annotations": [],
 				"type": "RestService",
+				"annotations": [],
 				"typeProperties": {
 					"url": "[parameters('RESTConn_properties_typeProperties_url')]",
-					"enableServerCertificateValidation": true,
 					"authenticationType": "Anonymous"
+				},
+				"parameters": {
+					"BaseUrl": {
+						"type": "String"
+					}
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/API')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "RESTConn",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"BaseUrl": {
+						"type": "string",
+						"defaultValue": "https://api.github.com/orgs/dotnet/repos"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/RESTConn')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DestinationDataset_zsk')]",
@@ -74,13 +102,19 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_zsk')]",
+			"name": "[concat(parameters('factoryName'), '/RESTAnon')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "RESTConn",
 					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"BaseUrl": {
+						"type": "string",
+						"defaultValue": "https://api.github.com/orgs/dotnet/repos"
+					}
 				},
 				"annotations": [],
 				"type": "RestResource",
@@ -92,13 +126,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/CopyPipeline_zsk')]",
+			"name": "[concat(parameters('factoryName'), '/APIGet')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"description": "Gets API data into raw layer of data lake as is",
 				"activities": [
 					{
-						"name": "Copy_zsk",
+						"name": "API Copy",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -136,7 +171,7 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "SourceDataset_zsk",
+								"referenceName": "API",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -150,10 +185,21 @@
 						]
 					}
 				],
+				"parameters": {
+					"URL": {
+						"type": "string"
+					},
+					"DataSource": {
+						"type": "string"
+					},
+					"DataSourceType": {
+						"type": "string"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_zsk')]",
+				"[concat(variables('factoryId'), '/datasets/API')]",
 				"[concat(variables('factoryId'), '/datasets/DestinationDataset_zsk')]"
 			]
 		}

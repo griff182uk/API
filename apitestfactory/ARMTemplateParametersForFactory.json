@@ -9,7 +9,7 @@
 			"value": "https://griffapitest.dfs.core.windows.net"
 		},
 		"RESTConn_properties_typeProperties_url": {
-			"value": "https://api.github.com/orgs/dotnet/repos"
+			"value": "@{linkedService().BaseUrl}"
 		}
 	}
 }

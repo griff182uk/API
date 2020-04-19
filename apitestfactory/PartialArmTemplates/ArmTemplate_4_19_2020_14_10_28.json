@@ -6,14 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "apitestfactory"
-		},
-		"LakeStorage_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://griffapitest.dfs.core.windows.net"
-		},
-		"RESTConn_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "@{linkedService().BaseUrl}"
 		}
 	},
 	"variables": {
@@ -67,15 +59,13 @@
 						"inputs": [
 							{
 								"referenceName": "API",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "DestinationDataset_zsk",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
@@ -94,8 +84,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/API')]",
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_zsk')]"
+				"[concat(variables('factoryId'), '/datasets/API')]"
 			]
 		},
 		{
@@ -115,36 +104,10 @@
 				},
 				"annotations": [],
 				"type": "RestResource",
-				"typeProperties": {},
 				"schema": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/RESTConn')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DestinationDataset_zsk')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LakeStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "repositories",
-						"folderPath": "github",
-						"fileSystem": "lake"
-					}
-				},
-				"schema": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LakeStorage')]"
 			]
 		},
 		{
@@ -164,25 +127,11 @@
 				},
 				"annotations": [],
 				"type": "RestResource",
-				"typeProperties": {},
 				"schema": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/RESTConn')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LakeStorage')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LakeStorage_properties_typeProperties_url')]"
-				}
-			},
-			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/RESTConn')]",
@@ -192,7 +141,7 @@
 				"type": "RestService",
 				"annotations": [],
 				"typeProperties": {
-					"url": "[parameters('RESTConn_properties_typeProperties_url')]",
+					"url": "@{linkedService().BaseUrl}",
 					"authenticationType": "Anonymous"
 				},
 				"parameters": {

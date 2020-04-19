@@ -13,7 +13,7 @@
 		},
 		"RESTConn_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://api.github.com/orgs/dotnet/repos"
+			"defaultValue": "@{linkedService().BaseUrl}"
 		},
 		"containerUri": {
 			"type": "string",
