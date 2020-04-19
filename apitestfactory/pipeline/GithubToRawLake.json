@@ -40,7 +40,7 @@
 			},
 			"Directory": {
 				"type": "String",
-				"defaultValue": "raw/github/repositories"
+				"defaultValue": "github/repositories"
 			}
 		},
 		"folder": {
