@@ -1,0 +1,10 @@
+{
+	"name": "RawLake",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://griffapitest.dfs.core.windows.net"
+		}
+	}
+}
